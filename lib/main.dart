@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 
@@ -48,6 +47,13 @@ class AdsPageState extends State<AdsPage> {
   /// All widget ads are stored in this variable. When a button is pressed, its
   /// respective ad widget is set to this variable and the view is rebuilt using
   /// setState().
+  final mediumRectangle = "2826231604349745_2883160021990236";
+  final nativeAds = "2826231604349745_2883159808656924";
+  final rewardedInterstitial = "2826231604349745_2883159571990281";
+  final interstitial = "2826231604349745_2826238451015727";
+  final banner = "2826231604349745_2826236501015922";
+  final nativeBanner = "2826231604349745_2883273701978868";
+
   Widget _currentAd = const SizedBox(
     width: 0.0,
     height: 0.0,
@@ -60,26 +66,23 @@ class AdsPageState extends State<AdsPage> {
     /// please add your own device testingId
     /// (testingId will print in console if you don't provide  )
     FacebookAudienceNetwork.init(
-      testingId: "a77955ee-3304-4635-be65-81029b0f5201",
+      testingId: "d1fdf274-ae3a-478c-bf6a-76e5fb0ee880",
       iOSAdvertiserTrackingEnabled: true,
     );
 
     _loadInterstitialAd();
-    _loadRewardedVideoAd();
+    // _loadRewardedVideoAd();
   }
 
   void _loadInterstitialAd() {
     FacebookInterstitialAd.loadInterstitialAd(
       // placementId: "YOUR_PLACEMENT_ID",
-      placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617",
+      placementId: "IMG_16_9_APP_INSTALL#$interstitial",
       listener: (result, value) {
-        print(">> FAN > Interstitial Ad: $result --> $value");
+        log(">> FAN > Interstitial Ad: $result --> $value");
         if (result == InterstitialAdResult.LOADED) {
           _isInterstitialAdLoaded = true;
         }
-
-        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
-        /// load a fresh Ad by calling this function.
         if (result == InterstitialAdResult.DISMISSED &&
             value["invalidated"] == true) {
           _isInterstitialAdLoaded = false;
@@ -91,7 +94,7 @@ class AdsPageState extends State<AdsPage> {
 
   void _loadRewardedVideoAd() {
     FacebookRewardedVideoAd.loadRewardedVideoAd(
-      placementId: "YOUR REWARDED AD ID",
+      placementId: "IMG_16_9_APP_INSTALL#$rewardedInterstitial",
       listener: (result, value) {
         log("Rewarded Ad: $result --> $value");
         if (result == RewardedVideoAdResult.LOADED) _isRewardedAdLoaded = true;
@@ -188,7 +191,7 @@ class AdsPageState extends State<AdsPage> {
     setState(() {
       _currentAd = FacebookBannerAd(
         placementId:
-        "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        "IMG_16_9_APP_INSTALL#$banner", //testid
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           log("Banner Ad: $result -->  $value");
@@ -206,7 +209,7 @@ class AdsPageState extends State<AdsPage> {
   Widget _nativeBannerAd() {
     return FacebookNativeAd(
       // placementId: "YOUR_PLACEMENT_ID",
-      placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2964953543583512",
+      placementId: "IMG_16_9_APP_INSTALL#$nativeBanner",
       adType: NativeAdType.NATIVE_BANNER_AD,
       bannerAdSize: NativeBannerAdSize.HEIGHT_100,
       width: double.infinity,
@@ -230,7 +233,7 @@ class AdsPageState extends State<AdsPage> {
 
   Widget _nativeAd() {
     return FacebookNativeAd(
-      placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2964952163583650",
+      placementId: "IMG_16_9_APP_INSTALL#$nativeAds",
       adType: NativeAdType.NATIVE_AD_VERTICAL,
       width: double.infinity,
       height: 300,
